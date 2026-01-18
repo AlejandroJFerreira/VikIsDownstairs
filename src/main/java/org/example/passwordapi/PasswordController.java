@@ -10,6 +10,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/passwords")
+@CrossOrigin(origins = "*")
 public class PasswordController {
 
     private final int SHIFT = 3;

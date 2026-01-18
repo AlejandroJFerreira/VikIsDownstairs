@@ -1,0 +1,96 @@
+/* Container of area below header */
+.side-layout {
+    height: 100vh;
+    padding-top: 70px;
+    display: flex;
+}
+
+/* Left-side section of side-layout */
+.sidebar {
+    display: grid;
+    grid-template-rows: 50px 50px 1fr 100px;
+    gap: 12px;
+    height: 100vh;
+    width: 240px;
+    position: fixed;
+    padding-top: 15px;
+    background-color: #3a3838;
+    border-right: 1px solid #4c4a4a;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 20px 16px 0px,
+}
+
+/* ------------------------------ Buttons ------------------------------ */
+
+.password-button-container, .add-password-button-container, .settings-button-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.password-button, .add-password-button, .settings-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ------------------------- Password Button ------------------------- */
+
+/* Key icon */
+.bi-key {
+    width: 32px;
+    height: 32px;
+    margin-right: 10px;
+}
+
+/* ------------------------- Add Password Button ------------------------- */
+
+.bi-plus-circle-dotted {
+    width: 26px;
+    height: 26px;
+    margin-right: 11px;
+}
+
+/* ------------------------- Setting Button ------------------------- */
+
+.settings-button {
+    margin-top: auto;
+}
+
+.bi-gear-wide-connected {
+    width: 26px;
+    height: 26px;
+    margin-right: 8px;
+}
+
+.settings-button .bi-gear-wide-connected {
+    transition: transform 0.5s ease;
+}
+
+.settings-button:hover .bi-gear-wide-connected {
+    transform: rotate(235deg);
+}
+
+/* ------------------------------------------------- All buttons ------------------------------------------------- */
+
+.sidebar button {
+    padding: 20px 15px;
+    height: 50px;
+    border-radius: 15px;
+    border: none;
+    cursor: pointer;
+    color: #ffffff;
+    font-family: 'Roboto', Arial, Helvetica, sans-serif;
+    font-size: 0.9rem;
+    font-weight: 400;
+    width: 95%;
+    background-color: #3a3838;
+    transition: background-color 0.25s;
+}
+
+.sidebar button:hover{
+    background-color: #5a5757;
+}
+
+.button-text {
+    margin-right: 10px;
+}

@@ -1,0 +1,26 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Base */
+body {
+    font-family: sans-serif;
+    background-color: #212529;
+    color: #e5e7eb;
+    height: 100vh;
+}
+
+.hidden {
+    display: none;
+}
+
+/* The entire area that excludes header and sidebar */
+.main-container {
+    margin-left: 240px;
+    width: 100%;
+    display: flex;
+    padding: 50px 70px;
+}

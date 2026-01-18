@@ -2,9 +2,144 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Manager</title>
 
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- CSS Links -->
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/header.css">
+    <link rel="stylesheet" href="styles/sidebar.css">
+    <link rel="stylesheet" href="styles/passwordList.css">
+    <link rel="stylesheet" href="styles/addPasswordForm.css">
+</head>
+
+<body>
+<!-- Header Container -->
+<div class="header">
+    <!-- Logo -->
+    <div class="header-left-section">
+        <button class="home-button" onclick="
+                        window.location.reload();
+                    ">
+            Password Manager
+        </button>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="header-middle-section">
+        <div class="search-container">
+            <!-- Search input and button will be here -->
+        </div>
+    </div>
+</div>
+
+<!-- Sidebar Container -->
+<div class="side-layout">
+    <aside class="sidebar">
+        <!-- Different Sidebar Functions-->
+        <div class="password-button-container">
+            <button class="password-button" id="password-button-id">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-key" viewBox="0 0 16 16">
+                    <path d="M0 8a4 4 0 0 1 7.465-2H14a.5.5 0 0 1 .354.146l1.5 1.5a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0L13 9.207l-.646.647a.5.5 0 0 1-.708 0L11 9.207l-.646.647a.5.5 0 0 1-.708 0L9 9.207l-.646.647A.5.5 0 0 1 8 10h-.535A4 4 0 0 1 0 8m4-3a3 3 0 1 0 2.712 4.285A.5.5 0 0 1 7.163 9h.63l.853-.854a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.793-.793-1-1h-6.63a.5.5 0 0 1-.451-.285A3 3 0 0 0 4 5"/>
+                    <path d="M4 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+                </svg>
+                <span class="button-text">
+                    Find Password
+                </span>
+            </button>
+        </div>
+
+        <div class="add-password-button-container">
+            <button class="add-password-button" id="add-password-button-id">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-dotted" viewBox="0 0 16 16">
+                    <path d="M8 0q-.264 0-.523.017l.064.998a7 7 0 0 1 .918 0l.064-.998A8 8 0 0 0 8 0M6.44.152q-.52.104-1.012.27l.321.948q.43-.147.884-.237L6.44.153zm4.132.271a8 8 0 0 0-1.011-.27l-.194.98q.453.09.884.237zm1.873.925a8 8 0 0 0-.906-.524l-.443.896q.413.205.793.459zM4.46.824q-.471.233-.905.524l.556.83a7 7 0 0 1 .793-.458zM2.725 1.985q-.394.346-.74.74l.752.66q.303-.345.648-.648zm11.29.74a8 8 0 0 0-.74-.74l-.66.752q.346.303.648.648zm1.161 1.735a8 8 0 0 0-.524-.905l-.83.556q.254.38.458.793l.896-.443zM1.348 3.555q-.292.433-.524.906l.896.443q.205-.413.459-.793zM.423 5.428a8 8 0 0 0-.27 1.011l.98.194q.09-.453.237-.884zM15.848 6.44a8 8 0 0 0-.27-1.012l-.948.321q.147.43.237.884zM.017 7.477a8 8 0 0 0 0 1.046l.998-.064a7 7 0 0 1 0-.918zM16 8a8 8 0 0 0-.017-.523l-.998.064a7 7 0 0 1 0 .918l.998.064A8 8 0 0 0 16 8M.152 9.56q.104.52.27 1.012l.948-.321a7 7 0 0 1-.237-.884l-.98.194zm15.425 1.012q.168-.493.27-1.011l-.98-.194q-.09.453-.237.884zM.824 11.54a8 8 0 0 0 .524.905l.83-.556a7 7 0 0 1-.458-.793zm13.828.905q.292-.434.524-.906l-.896-.443q-.205.413-.459.793zm-12.667.83q.346.394.74.74l.66-.752a7 7 0 0 1-.648-.648zm11.29.74q.394-.346.74-.74l-.752-.66q-.302.346-.648.648zm-1.735 1.161q.471-.233.905-.524l-.556-.83a7 7 0 0 1-.793.458zm-7.985-.524q.434.292.906.524l.443-.896a7 7 0 0 1-.793-.459zm1.873.925q.493.168 1.011.27l.194-.98a7 7 0 0 1-.884-.237zm4.132.271a8 8 0 0 0 1.012-.27l-.321-.948a7 7 0 0 1-.884.237l.194.98zm-2.083.135a8 8 0 0 0 1.046 0l-.064-.998a7 7 0 0 1-.918 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
+                </svg>
+                <span class="button-text">
+                    Add Password
+                </span>
+            </button>
+        </div>
+
+        <div class="settings-button-container">
+            <button class="settings-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear-wide-connected" viewBox="0 0 16 16">
+                    <path d="M7.068.727c.243-.97 1.62-.97 1.864 0l.071.286a.96.96 0 0 0 1.622.434l.205-.211c.695-.719 1.888-.03 1.613.931l-.08.284a.96.96 0 0 0 1.187 1.187l.283-.081c.96-.275 1.65.918.931 1.613l-.211.205a.96.96 0 0 0 .434 1.622l.286.071c.97.243.97 1.62 0 1.864l-.286.071a.96.96 0 0 0-.434 1.622l.211.205c.719.695.03 1.888-.931 1.613l-.284-.08a.96.96 0 0 0-1.187 1.187l.081.283c.275.96-.918 1.65-1.613.931l-.205-.211a.96.96 0 0 0-1.622.434l-.071.286c-.243.97-1.62.97-1.864 0l-.071-.286a.96.96 0 0 0-1.622-.434l-.205.211c-.695.719-1.888.03-1.613-.931l.08-.284a.96.96 0 0 0-1.186-1.187l-.284.081c-.96.275-1.65-.918-.931-1.613l.211-.205a.96.96 0 0 0-.434-1.622l-.286-.071c-.97-.243-.97-1.62 0-1.864l.286-.071a.96.96 0 0 0 .434-1.622l-.211-.205c-.719-.695-.03-1.888.931-1.613l.284.08a.96.96 0 0 0 1.187-1.186l-.081-.284c-.275-.96.918-1.65 1.613-.931l.205.211a.96.96 0 0 0 1.622-.434zM12.973 8.5H8.25l-2.834 3.779A4.998 4.998 0 0 0 12.973 8.5m0-1a4.998 4.998 0 0 0-7.557-3.779l2.834 3.78zM5.048 3.967l-.087.065zm-.431.355A4.98 4.98 0 0 0 3.002 8c0 1.455.622 2.765 1.615 3.678L7.375 8zm.344 7.646.087.065z"/>
+                </svg>
+                <span class="button-text">
+                    Settings
+                </span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main-container">
+        <!-- success message -->
+        <div id="message" class="message">Saved successfully!</div>
+
+        <!-- Popup overlay -->
+        <div id="popup-overlay-id" class="hidden">
+            <div id="popup-id">
+                <h2 id="popup-website-id"></h2>
+                <p>Username: <span id="popup-username-id"></span></p>
+                <p>Password: <span id="popup-password-id"></span></p>
+                <button id="close-popup-button-id">Close</button>
+            </div>
+        </div>
+
+        <section id="password-list-view" class="password-list-view">
+            <!-- Search form in find passwords view -->
+            <div class="search-form-container">
+                <h3>Find Password</h3>
+                <div class="search-input-group">
+                    <input
+                            type="text"
+                            id="search-website-input"
+                            class="search-website-input"
+                            placeholder="Enter website name..."
+                    />
+                    <button id="search-submit-button" class="search-submit-button">
+                        Search
+                    </button>
+                </div>
+                <p class="search-hint">Enter a website name and click Search to find saved passwords.</p>
+            </div>
+
+            <div id="password-container" class="password-container">
+                <!-- passwords list gets generated here -->
+            </div>
+        </section>
+
+        <section id="add-password-view" class="add-password-view hidden">
+            <!-- add password form -->
+            <div class="add-password-form-container">
+                <h6>Website</h6>
+                <input class="website-input" placeholder="Website" type="text" name="" id="website">
+
+                <h6>Username</h6>
+                <input class="username-input" placeholder="Username" type ="text" name="" id="username">
+
+                <h6>Password</h6>
+                <input class="password-input" placeholder="Password" type="text" name="" id="password">
+                <div class="form-actions">
+                    <button id="cancel-button-id" class="cancel-button">Cancel</button>
+                    <button id="save-button-id" class="save-button">Save</button>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+
+<!-- Javascript Links -->
+<script src="scripts/main.js"></script>
+<script src="scripts/remove.js"></script>
+<script src="scripts/closePopUp.js"></script>
+<script src="scripts/search.js"></script>
+<script src="scripts/get.js"></script>
 </body>
 </html>

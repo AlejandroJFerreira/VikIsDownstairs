@@ -1,107 +1,96 @@
 package org.example.passwordapi;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/wordpass")
+@CrossOrigin(origins = "*")
 public class PasswordGetAPI {
 
-    @GetMapping("/{site}")
-    public ResponseEntity<String> getPassword(@PathVariable String site) {
-        String data = getStoredDataForSite(site);
-        return ResponseEntity.ok(data);
-    }
+    private static final String PI_BASE_URL = "http://10.224.149.15:5000";
+    private static final int SHIFT = 3;
 
-//    @GetMapping("/all")
-//    public ResponseEntity<String> getAllPasswords() {
-//        String data = getAllStoredData();
-//        return ResponseEntity.ok(data);
-//    }
+    /**
+     * STORE PASSWORD
+     * Client → Java → Raspberry Pi
+     */
+    @PostMapping("/store")
+    public String storePassword(@RequestBody Map<String, Object> passwordData) {
 
-    // Method to get data for a specific site
-    public String getStoredDataForSite(String site) {
+        String service = (String) passwordData.get("service");
+        String password = (String) passwordData.get("password");
+
+        if (service == null || password == null) {
+            return "Missing service or password";
+        }
+
+        String encryptedPassword = EncryptionUtil.caesarEncrypt(password, SHIFT);
+
+        String json = "{"
+                + "\"service\":\"" + service.toLowerCase() + "\","
+                + "\"ciphertext\":\"" + encryptedPassword + "\","
+                + "\"iv\":\"dummyiv\","
+                + "\"salt\":\"dummysalt\""
+                + "}";
+
         try {
-            // Add site as a query parameter (adjust based on your server API)
-            URL url = new URL("http://10.224.149.15:5000/store?site=" + site);
+            URL url = new URL(PI_BASE_URL + "/store");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.setRequestProperty("Accept", "application/json");
 
-            int responseCode = conn.getResponseCode();
-            System.out.println("GET Response Code: " + responseCode);
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setDoOutput(true);
 
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                BufferedReader in = new BufferedReader(
-                        new InputStreamReader(conn.getInputStream()));
-                String inputLine;
-                StringBuilder response = new StringBuilder();
-
-                while ((inputLine = in.readLine()) != null) {
-                    response.append(inputLine);
-                }
-                in.close();
-
-                String jsonResponse = response.toString();
-                System.out.println("Received data: " + jsonResponse);
-                return jsonResponse;
-            } else {
-                // Read error stream for more details
-                try (BufferedReader errorReader = new BufferedReader(
-                        new InputStreamReader(conn.getErrorStream()))) {
-                    StringBuilder errorResponse = new StringBuilder();
-                    String errorLine;
-                    while ((errorLine = errorReader.readLine()) != null) {
-                        errorResponse.append(errorLine);
-                    }
-                    return "GET request failed: " + responseCode + " - " + errorResponse.toString();
-                }
+            try (OutputStream os = conn.getOutputStream()) {
+                os.write(json.getBytes(StandardCharsets.UTF_8));
             }
+
+            return "Password encrypted and stored";
+
         } catch (Exception e) {
             e.printStackTrace();
-            return "Error reading data from server: " + e.getMessage();
+            return "Error storing password";
         }
     }
 
-    // Method to get all data
-    public String getAllStoredData() {
+    /**
+     * RETRIEVE PASSWORD
+     * Client → Java → Raspberry Pi
+     */
+    @GetMapping("/retrieve")
+    public String retrievePassword(@RequestParam String service) {
+
         try {
-            URL url = new URL("http://10.224.149.15:5000/store");
+            String query = PI_BASE_URL + "/retrieve?service="
+                    + URLEncoder.encode(service.toLowerCase(), StandardCharsets.UTF_8);
+
+            URL url = new URL(query);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
 
-            int responseCode = conn.getResponseCode();
-            System.out.println("GET Response Code: " + responseCode);
+            InputStream is = conn.getResponseCode() < 400
+                    ? conn.getInputStream()
+                    : conn.getErrorStream();
 
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                BufferedReader in = new BufferedReader(
-                        new InputStreamReader(conn.getInputStream()));
-                String inputLine;
-                StringBuilder response = new StringBuilder();
-
-                while ((inputLine = in.readLine()) != null) {
-                    response.append(inputLine);
-                }
-                in.close();
-
-                String jsonResponse = response.toString();
-                System.out.println("Received all data: " + jsonResponse);
-                return jsonResponse;
-            } else {
-                return "GET request failed with response code: " + responseCode;
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
+                return br.lines().collect(Collectors.joining());
             }
+
         } catch (Exception e) {
             e.printStackTrace();
-            return "Error reading data from server!";
+            return "Error retrieving password";
         }
     }
 }
