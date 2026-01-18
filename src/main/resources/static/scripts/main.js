@@ -150,9 +150,49 @@ async function doGet(website) {
         }
 
         // Show popup with retrieved data
-        document.getElementById("popup-website-id").textContent = website;
-        document.getElementById("popup-username-id").textContent = "Retrieved from API";
-        document.getElementById("popup-password-id").textContent = typeof passwordData === 'string' ? passwordData : JSON.stringify(passwordData);
+        let user = "";
+        let service = website;
+        let password = "";
+        if (typeof passwordData === 'object' && passwordData !== null && passwordData.status === "success") {
+            // Prefer username from data if available
+            if (passwordData.data && typeof passwordData.data === 'object' && passwordData.data.username) {
+                user = passwordData.data.username;
+            } else {
+                user = passwordData.user || "";
+            }
+            service = passwordData.service || website;
+            // passwordData.data could be an object or string
+            if (typeof passwordData.data === 'object' && passwordData.data !== null) {
+                const cipher = passwordData.data.ciphertext || "";
+                password = decipher(cipher);
+            } else {
+                password = passwordData.data || "";
+            }
+        // Caesar decipher function: shift each letter/digit back by 3, wrap around
+        function decipher(text) {
+            const shift = 3;
+            return text.split('').map(char => {
+                if (/[A-Z]/.test(char)) {
+                    // Uppercase letters
+                    return String.fromCharCode((char.charCodeAt(0) - 'A'.charCodeAt(0) - shift + 26) % 26 + 'A'.charCodeAt(0));
+                } else if (/[a-z]/.test(char)) {
+                    // Lowercase letters
+                    return String.fromCharCode((char.charCodeAt(0) - 'a'.charCodeAt(0) - shift + 26) % 26 + 'a'.charCodeAt(0));
+                } else if (/[0-9]/.test(char)) {
+                    // Digits
+                    return String.fromCharCode((char.charCodeAt(0) - '0'.charCodeAt(0) - shift + 10) % 10 + '0'.charCodeAt(0));
+                } else {
+                    // Other characters unchanged
+                    return char;
+                }
+            }).join('');
+        }
+        } else if (typeof passwordData === 'string') {
+            password = passwordData;
+        }
+        document.getElementById("popup-website-id").textContent = service;
+        document.getElementById("popup-username-id").textContent = user ? user : "Retrieved from API";
+        document.getElementById("popup-password-id").textContent = password;
         document.getElementById("popup-overlay-id").classList.remove("hidden");
 
     } catch (error) {
